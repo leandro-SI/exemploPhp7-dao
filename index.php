@@ -40,11 +40,16 @@ echo $aluno;
 */
 
 
+/*//Alterando um usuário existente
 $usuario = new Usuario();
-
 $usuario->loadById(4);
-
 $usuario->update("professor", "1234");
+echo $usuario;*/
+
+
+$usuario = new Usuario();
+$usuario->loadById(4);
+$usuario->delete();
 
 echo $usuario;
 
