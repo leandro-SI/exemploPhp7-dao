@@ -92,17 +92,76 @@ class Usuario extends Sql {
 
 		if(count($resultado) > 0){
 
-			$row = $resultado[0];
-			$this->setIdusuario($row['idusuario']);
-			$this->setDeslogin($row['deslogin']);
-			$this->setDessenha($row['dessenha']);
-			$this->setDtcadastri(new DateTime($row['dtcadastro']));
+			$this->setData($resultado[0]);
+
 		}else{
 
 			throw new Exception("Login ou Senha inválidos", 1);
 			
 		}
 	}
+
+
+
+
+
+	/////////////////////// PDO - DAO - INSERT ///////////////////////////////
+
+	public function setData($data){
+
+		$this->setIdusuario($data['idusuario']);
+		$this->setDeslogin($data['deslogin']);
+		$this->setDessenha($data['dessenha']);
+		$this->setDtcadastri(new DateTime($data['dtcadastro']));
+
+	}
+
+
+
+	public function insert(){
+
+		$sql = new Sql();
+
+		$resultado = $sql->select("CALL sp_usuarios_insert(:LOGIN, :PASSWORD)", array(
+			":LOGIN" => $this->getDeslogin(),
+			":PASSWORD" => $this->getDessenha()
+		));
+
+		if(count($resultado) > 0){
+			$this->setData($resultado[0]);
+		}
+
+
+	}
+
+	////////////////////////////////////////////////////////////////////////////////////////
+
+
+	///////////////////////// PDO - DAO - UPDATE ///////////////////////////////////////////
+
+
+
+	public function update($login, $password){
+
+		$this->setDeslogin($login);
+		$this->setDessenha($password);
+
+		$sql = new Sql();
+
+		$sql->query("UPDATE tb_usuarios SET deslogin = :LOGIN, dessenha = :PASSWORD WHERE idusuario = :ID", array(
+			":LOGIN" => $this->getDeslogin(),
+			":PASSWORD" => $this->getDessenha(),
+			":ID" => $this->getIdusuario()
+		));
+
+
+	}
+
+
+
+
+
+
 
 
 	public function __toString(){

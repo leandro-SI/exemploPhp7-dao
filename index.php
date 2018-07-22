@@ -25,10 +25,26 @@ $search = Usuario::search("L");
 echo json_encode($search);*/
 
 
-//Carrega um usuário usando o login e a senha
-
+/*//Carrega um usuário usando o login e a senha
 $usuario = new Usuario();
 $usuario->login("Leandro", "1234");
+echo $usuario;*/
+
+
+/*//Criando um novo Úsuário
+$aluno = new Usuario();
+$aluno->setDeslogin("aluno");
+$aluno->setDessenha("@alun0");
+$aluno->insert();
+echo $aluno;
+*/
+
+
+$usuario = new Usuario();
+
+$usuario->loadById(4);
+
+$usuario->update("professor", "1234");
 
 echo $usuario;
 
