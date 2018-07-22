@@ -42,6 +42,7 @@ class Usuario extends Sql {
 
 
 
+	/*Busca no banco um Usuario pelo seu id*/
 	public function loadById($id){
 
 		$sql = new Sql();
@@ -59,6 +60,50 @@ class Usuario extends Sql {
 			$this->setDtcadastri(new DateTime($row['dtcadastro']));
 		}
 	}
+
+
+	public static function getList(){
+
+		$sql = new Sql();
+
+		return $sql->select("SELECT * FROM tb_usuarios");
+	}
+
+
+	public static function search($login){
+
+		$sql = new Sql();
+
+		return $sql->select("SELECT * FROM tb_usuarios WHERE deslogin LIKE :SEARCH", array(
+			":SEARCH" => "%" . $login . "%"
+		));
+
+
+	}
+
+	public function login($login, $senha){
+
+		$sql = new Sql();
+
+		$resultado = $sql->select("SELECT * FROM tb_usuarios WHERE deslogin = :LOGIN AND dessenha = :SENHA", array(
+			":LOGIN" => $login,
+			":SENHA" => $senha
+		));
+
+		if(count($resultado) > 0){
+
+			$row = $resultado[0];
+			$this->setIdusuario($row['idusuario']);
+			$this->setDeslogin($row['deslogin']);
+			$this->setDessenha($row['dessenha']);
+			$this->setDtcadastri(new DateTime($row['dtcadastro']));
+		}else{
+
+			throw new Exception("Login ou Senha inválidos", 1);
+			
+		}
+	}
+
 
 	public function __toString(){
 
